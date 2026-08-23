@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import emailjs from '@emailjs/browser'
 import Section from '../ui/Section.jsx'
 import Input from '../ui/Input.jsx'
 import Textarea from '../ui/Textarea.jsx'
@@ -42,13 +43,23 @@ export default function ContactForm() {
 
     setStatus('submitting')
     try {
-      const res = await fetch('/api/send-enquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-
-      if (!res.ok) throw new Error('Request failed')
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          phone: form.phone,
+          company: form.company || '—',
+          project_type: form.projectType,
+          budget: form.budget || '—',
+          timeline: form.timeline || '—',
+          platforms: (form.platforms || []).join(', ') || '—',
+          integrations: (form.integrations || []).join(', ') || '—',
+          description: form.description,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      )
 
       setStatus('success')
       setForm(initialState)

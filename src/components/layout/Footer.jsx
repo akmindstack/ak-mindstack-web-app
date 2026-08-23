@@ -51,12 +51,12 @@ export default function Footer() {
                 hello@akmindstack.com
               </a>
               <a
-                href="https://wa.me/910000000000"
+                href="https://wa.me/917418547514"
                 target="_blank"
                 rel="noreferrer"
                 className="text-signal-light hover:underline"
               >
-                Chat on WhatsApp
+                +91 74185 47514
               </a>
             </div>
           </div>

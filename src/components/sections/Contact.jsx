@@ -19,13 +19,13 @@ export default function Contact() {
               <br />
               Let's build it together.
             </h2>
-            <p className="mt-3 text-paper/60">hello@akmindstack.com · Response within 1 business day</p>
+            <p className="mt-3 text-paper/60">hello@akmindstack.com · +91 74185 47514 · Response within 1 business day</p>
           </div>
           <div className="flex flex-wrap gap-4">
             <Button as="a" href="#contact-form" variant="primary">
               Start a Project Discussion
             </Button>
-            <Button as="a" href="https://wa.me/910000000000" target="_blank" rel="noreferrer" variant="outline" className="text-paper">
+            <Button as="a" href="https://wa.me/917418547514" target="_blank" rel="noreferrer" variant="outline" className="text-paper">
               Message on WhatsApp
             </Button>
           </div>
