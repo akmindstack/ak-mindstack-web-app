@@ -52,12 +52,12 @@ export default function Footer() {
                 akmindstack@gmail.com
               </a>
               <a
-                href="https://wa.me/919894252994"
+                href="https://wa.me/91917845747514"
                 target="_blank"
                 rel="noreferrer"
                 className="text-signal-light hover:underline"
               >
-                +91 98942 52994
+                +91 78457 47514
               </a>
             </div>
           </div>
