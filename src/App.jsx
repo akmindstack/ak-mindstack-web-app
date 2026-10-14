@@ -7,6 +7,7 @@ import Services from './components/sections/Services.jsx'
 import Solutions from './components/sections/Solutions.jsx'
 import Process from './components/sections/Process.jsx'
 import WhyUs from './components/sections/WhyUs.jsx'
+import Clients from './components/sections/Clients.jsx'
 import ContactForm from './components/sections/ContactForm.jsx'
 import Contact from './components/sections/Contact.jsx'
 
@@ -21,6 +22,7 @@ export default function App() {
         <Solutions />
         <Process />
         <WhyUs />
+        <Clients />
         <ContactForm />
         <Contact />
       </main>

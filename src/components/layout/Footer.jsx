@@ -6,6 +6,7 @@ const columns = [
     links: [
       { label: 'About', href: '#about' },
       { label: 'How We Work', href: '#process' },
+      { label: 'Our Work', href: '#clients' },
       { label: 'Why AK Mindstack', href: '#why-us' },
     ],
   },
@@ -47,16 +48,16 @@ export default function Footer() {
             <p className="mt-3 max-w-xs text-sm text-paper/60">Smart Thinking. Strong Tech.</p>
             <p className="mt-6 text-sm text-paper/70">Have an idea? Let's build it together.</p>
             <div className="mt-3 flex flex-col gap-1 text-sm">
-              <a href="mailto:hello@akmindstack.com" className="text-signal-light hover:underline">
-                hello@akmindstack.com
+              <a href="mailto:akmindstack@gmail.com" className="text-signal-light hover:underline">
+                akmindstack@gmail.com
               </a>
               <a
-                href="https://wa.me/917418547514"
+                href="https://wa.me/919894252994"
                 target="_blank"
                 rel="noreferrer"
                 className="text-signal-light hover:underline"
               >
-                +91 74185 47514
+                +91 98942 52994
               </a>
             </div>
           </div>

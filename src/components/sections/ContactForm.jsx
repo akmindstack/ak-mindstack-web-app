@@ -196,7 +196,7 @@ export default function ContactForm() {
         {status === 'error' && (
           <p role="alert" className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-600">
             Something went wrong sending your request. Please try again, or email us directly at
-            hello@akmindstack.com.
+            akmindstack@gmail.com.
           </p>
         )}
 

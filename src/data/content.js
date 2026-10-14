@@ -143,6 +143,43 @@ export const whyUs = [
   'Post-launch support',
 ]
 
+export const clients = [
+  {
+    id: 'genztoys',
+    name: 'GenzToys',
+    url: 'https://www.genztoys.in/',
+    category: 'E-Commerce Platform',
+    description: 'A complete online toy store — from storefront to admin panel, built and deployed in production.',
+    features: [
+      'Admin panel',
+      'Product management',
+      'Category management',
+      'Order management',
+      'Payment integration',
+      'Cart & checkout',
+      'Customer management',
+      'Dashboard & reports',
+    ],
+  },
+  {
+    id: 'hifa-fragrance',
+    name: 'Hifa Fragrance',
+    url: 'https://hifa-fragrance.com/',
+    category: 'E-Commerce Platform',
+    description: 'A full-featured fragrance brand store — product catalog, orders, and a powerful admin panel.',
+    features: [
+      'Admin panel',
+      'Product management',
+      'Category management',
+      'Order management',
+      'Payment integration',
+      'Cart & checkout',
+      'Customer management',
+      'Dashboard & reports',
+    ],
+  },
+]
+
 export const projectTypes = [
   'Web Application',
   'Mobile Application',
