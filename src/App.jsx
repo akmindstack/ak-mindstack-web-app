@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from './components/layout/Navbar.jsx'
 import Footer from './components/layout/Footer.jsx'
 import Hero from './components/sections/Hero.jsx'
+import Stats from './components/sections/Stats.jsx'
 import About from './components/sections/About.jsx'
 import Services from './components/sections/Services.jsx'
 import Solutions from './components/sections/Solutions.jsx'
@@ -17,6 +18,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <Stats />
         <About />
         <Services />
         <Solutions />

@@ -2,38 +2,40 @@ export const services = [
   {
     tag: '01',
     title: 'Web Application Development',
-    description:
-      'Custom web applications built around specific business requirements — not templated systems retrofitted to fit.',
+    description: 'Custom web applications built around your business — not templates retrofitted to fit.',
+    features: ['Custom business logic', 'Admin dashboard', 'User & role management', 'Reports & analytics', 'API integrations', 'Scalable architecture'],
   },
   {
     tag: '02',
     title: 'Mobile App Development',
-    description:
-      'Modern Android and iOS applications for businesses and their customers, built for real-world usage patterns.',
+    description: 'Android and iOS apps for businesses and their customers, built for real-world usage.',
+    features: ['Android & iOS', 'Custom UI/UX', 'Push notifications', 'Offline support', 'Backend integration', 'App Store deployment'],
   },
   {
     tag: '03',
     title: 'E-Commerce Development',
-    description:
-      'Complete commerce platforms — products, payments, orders, customers, admin dashboards, and integrations.',
+    description: 'Complete online store — products, categories, payments, orders, and a full admin panel to run everything.',
+    badge: 'Payment Integrated',
+    features: ['Product & category management', 'Payment gateway', 'Cart & checkout', 'Order management', 'Customer management', 'Admin dashboard & reports'],
   },
   {
     tag: '04',
     title: 'WhatsApp Business Integration',
-    description:
-      'Automation, notifications, customer communication, message templates, and business workflows on WhatsApp.',
+    description: 'Automate customer communication, collect payments, and run campaigns — all on WhatsApp.',
+    badge: 'Payment Ready',
+    features: ['Automated messages', 'Payment collection', 'Order notifications', 'Campaign broadcasts', 'Message templates', 'Customer workflows'],
   },
   {
     tag: '05',
-    title: 'Business Management Software',
-    description:
-      'Custom operations software for managing customers, employees, reports, and internal workflows.',
+    title: 'School & Business Administration',
+    description: 'Custom management systems for schools, companies, and institutions — built to run daily operations.',
+    features: ['Attendance management', 'Staff & student records', 'Role-based access control', 'Reports & dashboards', 'Parent / employee notifications', 'Mobile application support'],
   },
   {
     tag: '06',
     title: 'API & Third-Party Integrations',
-    description:
-      'Connecting payment gateways, WhatsApp, email, CRM, ERP, and cloud services into one working system.',
+    description: 'Connecting payment gateways, WhatsApp, email, CRM, ERP, and cloud services into one system.',
+    features: ['Payment gateway setup', 'WhatsApp API', 'Email services', 'CRM & ERP systems', 'Cloud storage', 'Custom API development'],
   },
 ]
 
@@ -41,59 +43,62 @@ export const solutions = [
   {
     id: 'ecommerce',
     title: 'E-Commerce Platform',
-    summary: 'A complete online shopping platform, built to run a real store — not a demo.',
+    summary: 'A complete online store — from customer-facing shopping to admin panel that runs the whole business.',
+    badge: 'Payment Integrated',
     features: [
-      'Product management',
-      'Categories',
+      'Product & category management',
+      'Online payment gateway',
       'Cart & checkout',
-      'Online payments',
       'Order management',
       'Customer management',
       'Admin dashboard',
       'Reports & analytics',
+      'Inventory tracking',
     ],
   },
   {
     id: 'whatsapp',
     title: 'WhatsApp Business Integration',
-    summary: 'A business communication and automation platform built on the WhatsApp API.',
+    summary: 'Automate communication, collect payments, and manage customers — all through WhatsApp.',
+    badge: 'Payment Ready',
     features: [
       'WhatsApp API integration',
-      'Automated messages',
-      'Notifications',
+      'Payment collection',
+      'Automated order messages',
+      'Campaign broadcasts',
       'Customer communication',
-      'Campaigns',
-      'Templates',
+      'Message templates',
       'Workflow automation',
-    ],
-  },
-  {
-    id: 'hotel',
-    title: 'Hotel Management System',
-    summary: 'A custom hotel management web and mobile application for day-to-day operations.',
-    features: [
-      'Room management',
-      'Booking management',
-      'Customer management',
-      'Check-in / check-out',
-      'Billing',
-      'Staff management',
-      'Reports',
-      'Dashboard',
+      'Admin control panel',
     ],
   },
   {
     id: 'school',
-    title: 'School Attendance Management',
-    summary: 'A school attendance tracking platform for staff, students, and parents.',
+    title: 'School & Institution Management',
+    summary: 'A full management system for schools — attendance, staff, students, parents, and daily operations.',
     features: [
-      'Student management',
-      'Teacher management',
+      'Student & teacher management',
       'Attendance tracking',
       'Class management',
-      'Parent communication',
-      'Reports',
-      'Dashboard',
+      'Parent notifications',
+      'Role-based admin access',
+      'Reports & dashboard',
+      'Fee & billing management',
+      'Mobile application support',
+    ],
+  },
+  {
+    id: 'business',
+    title: 'Company Administration System',
+    summary: 'Custom internal software for companies to manage employees, operations, and day-to-day workflows.',
+    features: [
+      'Employee management',
+      'Attendance & leave tracking',
+      'Task & workflow management',
+      'Role-based access control',
+      'Reports & dashboards',
+      'Notification system',
+      'Document management',
       'Mobile application support',
     ],
   },
@@ -130,6 +135,13 @@ export const process = [
     title: 'Launch',
     description: 'Deploy the product and provide ongoing support.',
   },
+]
+
+export const stats = [
+  { value: '2+', label: 'Projects Live in Production' },
+  { value: '100%', label: 'Custom Built — No Templates' },
+  { value: 'Full', label: 'Payment Gateway Integration' },
+  { value: 'Every', label: 'Build Has an Admin Panel' },
 ]
 
 export const whyUs = [
