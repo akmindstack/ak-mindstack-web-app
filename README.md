@@ -1,153 +1,215 @@
-# AK Mindstack — Website
+# AK Mindstack — Official Website
 
 **Smart Thinking. Strong Tech.**
 
-A production-ready marketing site for AK Mindstack, a custom software development
-studio. Built with React, Vite, Tailwind CSS and Framer Motion, with a secure
-serverless function that emails project enquiries to the AK Mindstack admin
-inbox without ever exposing credentials in the frontend.
+The official marketing and enquiry website for **AK Mindstack**, a custom software development studio based in India. Built as a single-page React app that explains all services, showcases live client projects, demonstrates how WhatsApp Business ordering works, and lets potential clients submit a project enquiry.
 
-## Architecture
+**Live:** https://akmindstack.web.app
+**GitHub:** https://github.com/akmindstack/ak-mindstack-web-app
 
-```
-React Frontend (src/)
-   → POST /api/send-enquiry
-   → Serverless Function (api/send-enquiry.js)
-   → Resend Email API
-   → AK Mindstack Admin Email
-```
+---
 
-The frontend never talks to Resend directly and never sees `RESEND_API_KEY`.
-It only calls your own `/api/send-enquiry` endpoint, which reads secrets from
-server-side environment variables.
+## About AK Mindstack
 
-## Project structure
+AK Mindstack designs and builds custom digital products for businesses — from customer-facing web and mobile applications to internal tools that run day-to-day operations. Every build is custom, includes an admin panel, and is built to scale.
+
+**Contact**
+- Email: akmindstack@gmail.com
+- Phone / WhatsApp: +91 78457 47514
+- WhatsApp link: https://wa.me/917845747514
+
+---
+
+## What this site communicates
+
+| Section | Purpose |
+|---|---|
+| Hero | Studio intro + animated radial system diagram |
+| Stats bar | 2+ live projects · 100% custom · Full payment integration · Admin panel on every build |
+| About | Capabilities overview |
+| Services | 6 services with full feature breakdowns |
+| WhatsApp Flow | Live animated demo — full order journey inside WhatsApp |
+| Solutions | 4 complete systems ready to build |
+| How We Work | 6-step process from discuss to launch |
+| Why AK Mindstack | 8 differentiators |
+| Live Projects | 2 live client projects in production |
+| Project Enquiry | Detailed contact form sent via EmailJS |
+| Contact CTA | Email + WhatsApp direct links |
+
+---
+
+## Services
+
+### 01 — Web Application Development
+Custom web applications built around your business — not templates.
+- Custom business logic · Admin dashboard · User & role management
+- Reports & analytics · API integrations · Scalable architecture
+
+### 02 — Mobile App Development
+Android and iOS apps for businesses and their customers.
+- Android & iOS · Custom UI/UX · Push notifications
+- Offline support · Backend integration · App Store deployment
+
+### 03 — E-Commerce Development *(Payment Integrated)*
+Complete online store — products, categories, payments, orders, admin panel.
+- Product & category management · Payment gateway · Cart & checkout
+- Order management · Customer management · Admin dashboard & reports
+
+### 04 — WhatsApp Business Integration *(Payment Ready)*
+Automate communication, collect payments, run campaigns — all on WhatsApp.
+- Automated messages · Payment collection · Order notifications
+- Campaign broadcasts · Message templates · Customer workflows
+
+### 05 — School & Business Administration
+Management systems for schools, companies, and institutions.
+- Attendance management · Staff & student records · Role-based access control
+- Reports & dashboards · Parent / employee notifications · Mobile app support
+
+### 06 — API & Third-Party Integrations
+Connecting payment gateways, WhatsApp, email, CRM, ERP, and cloud services.
+- Payment gateway setup · WhatsApp API · Email services
+- CRM & ERP systems · Cloud storage · Custom API development
+
+---
+
+## Solutions (complete systems)
+
+### E-Commerce Platform *(Payment Integrated)*
+A complete online store from storefront to admin panel.
+Product & category management · Online payment gateway · Cart & checkout · Order management · Customer management · Admin dashboard · Reports & analytics · Inventory tracking
+
+### WhatsApp Business Integration *(Payment Ready)*
+Automate communication, collect payments, manage customers — all through WhatsApp.
+WhatsApp API integration · Payment collection · Automated order messages · Campaign broadcasts · Customer communication · Message templates · Workflow automation · Admin control panel
+
+### School & Institution Management
+Full management system for schools — attendance, staff, students, parents, operations.
+Student & teacher management · Attendance tracking · Class management · Parent notifications · Role-based admin access · Reports & dashboard · Fee & billing management · Mobile app support
+
+### Company Administration System
+Custom internal software to manage employees, operations, and workflows.
+Employee management · Attendance & leave tracking · Task & workflow management · Role-based access control · Reports & dashboards · Notification system · Document management · Mobile app support
+
+---
+
+## WhatsApp Business Flow Demo
+
+The site includes an animated 7-step WhatsApp order flow demo showing how a customer goes from first message to a delivered order — all inside WhatsApp without downloading any app.
+
+| Step | What happens |
+|---|---|
+| 01 | Customer says Hi → bot replies with product catalog |
+| 02 | Customer browses catalog, selects item and quantity |
+| 03 | Bot shows order summary for review |
+| 04 | Customer types delivery address |
+| 05 | Order confirmed and logged in admin panel |
+| 06 | UPI payment link sent (PhonePe / GPay / Paytm / BHIM) |
+| 07 | Payment received → order placed → success message sent |
+
+---
+
+## Live Client Projects
+
+### GenzToys — https://www.genztoys.in/
+*E-Commerce Platform · Live in production*
+Admin panel · Product management · Category management · Order management · Payment integration · Cart & checkout · Customer management · Dashboard & reports
+
+### Hifa Fragrance — https://hifa-fragrance.com/
+*E-Commerce Platform · Live in production*
+Admin panel · Product management · Category management · Order management · Payment integration · Cart & checkout · Customer management · Dashboard & reports
+
+---
+
+## Development Process
+
+| Step | Title | Description |
+|---|---|---|
+| 01 | Discuss | Understand the business requirements and idea |
+| 02 | Plan | Define features, architecture, timeline, and technology |
+| 03 | Design | Create a clean and user-friendly UI/UX |
+| 04 | Develop | Build the web/mobile application with scalable architecture |
+| 05 | Test | Perform testing, bug fixing, and quality checks |
+| 06 | Launch | Deploy the product and provide ongoing support |
+
+---
+
+## Why AK Mindstack
+
+- Custom-built solutions, not templates
+- Modern technology, chosen for the problem
+- Scalable architecture from day one
+- Clean, functional UI/UX
+- Business-focused development
+- API & third-party integrations
+- Web & mobile development under one roof
+- Post-launch support
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 18 + Vite |
+| Styling | Tailwind CSS v3 with custom design tokens |
+| Animations | Framer Motion |
+| Contact form | EmailJS (@emailjs/browser) |
+| Hosting | Firebase Hosting |
+| Repo | GitHub — akmindstack/ak-mindstack-web-app |
+
+### Design tokens (tailwind.config.js)
+- **ink** `#12161C` — dark background
+- **paper** `#F3F4F0` — light background
+- **signal** `#00B8A9` — teal accent
+- **volt** `#FFC53D` — yellow accent
+- **Fonts:** Space Grotesk (headings) · Inter (body) · JetBrains Mono (mono/labels)
+
+---
+
+## Project Structure
 
 ```
 src/
   components/
-    ui/          Reusable primitives: Button, Card, Input, Textarea, Select,
-                  CheckboxGroup, Modal, Badge, Section
     layout/       Navbar, Footer
-    sections/     Hero, About, Services, Solutions, Process, WhyUs,
+    sections/     Hero, Stats, About, Services, WhatsAppFlow,
+                  Solutions, Process, WhyUs, Clients,
                   ContactForm, Contact
-    visuals/      SystemMap — the animated hero diagram
-  data/           Static content (services, solutions, process, form options)
-  lib/            Form validation
-api/
-  send-enquiry.js Serverless function that sends the enquiry email
+    ui/           Button, Card, Input, Textarea, Select,
+                  CheckboxGroup, Modal, Badge, Section
+    visuals/      SystemMap — animated radial hero diagram
+  data/
+    content.js    All site copy: services, solutions, clients,
+                  process steps, stats, form options
+  lib/
+    validate.js   Contact form validation
 ```
 
-## 1. Installing dependencies
+---
 
-Requires Node.js 18+.
+## Environment Variables
+
+```
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+---
+
+## Local Development
 
 ```bash
 npm install
+npm run dev        # http://localhost:5173
 ```
 
-## 2. Running the project locally
-
-```bash
-npm run dev
-```
-
-This starts the Vite dev server (usually at `http://localhost:5173`).
-
-> **Note:** `npm run dev` only serves the frontend. The `/api/send-enquiry`
-> function needs a serverless runtime to execute locally — see below.
-
-To run the API route locally the way it will run in production, use the
-Vercel CLI:
-
-```bash
-npm install -g vercel
-vercel dev
-```
-
-`vercel dev` serves both the Vite frontend and the `/api/send-enquiry`
-function together, proxying API requests correctly.
-
-## 3. Configuring environment variables
-
-```bash
-cp .env.example .env
-```
-
-Then fill in:
-
-| Variable          | Description                                                        |
-| ----------------- | ------------------------------------------------------------------- |
-| `RESEND_API_KEY`  | API key from your [Resend](https://resend.com) account              |
-| `ADMIN_EMAIL`     | The inbox that should receive new project enquiries                 |
-| `EMAIL_FROM`      | The verified sender address enquiry emails are sent from            |
-
-These are read **only** inside `api/send-enquiry.js` (server-side). Nothing
-prefixed for Vite (`VITE_...`) is used for secrets, so nothing here is bundled
-into the browser build.
-
-## 4. Setting up the email service
-
-This project uses [Resend](https://resend.com) because it has a simple API
-and a generous free tier, but `api/send-enquiry.js` is small enough to swap
-for Nodemailer + SMTP, SendGrid, or Postmark if you prefer.
-
-1. Create a Resend account and verify a sending domain (or use their shared
-   test domain while developing).
-2. Generate an API key and put it in `RESEND_API_KEY`.
-3. Set `EMAIL_FROM` to an address on your verified domain.
-4. Set `ADMIN_EMAIL` to where enquiries should land.
-
-## 5. Testing the project enquiry form
-
-1. Run `vercel dev` (or deploy to a preview environment).
-2. Fill out the **Let's Discuss Your Project** form and submit.
-3. Confirm:
-   - The button shows a "Sending…" loading state.
-   - On success, the form is replaced with the "Thank you!" confirmation.
-   - The configured `ADMIN_EMAIL` inbox receives a **New Project Enquiry**
-     email with all submitted fields and a **Reply to Client** link.
-   - Submitting with required fields empty shows inline validation errors
-     and does not call the API.
-   - Temporarily using an invalid `RESEND_API_KEY` shows the inline error
-     message and does not crash the page.
-
-## 6. Building for production
+## Build & Deploy
 
 ```bash
 npm run build
+firebase deploy --only hosting
 ```
 
-Output is written to `dist/`. Preview it locally with:
-
-```bash
-npm run preview
-```
-
-## 7. Deploying the application
-
-**Vercel (recommended — zero config for the `api/` function):**
-
-1. Push this repository to GitHub.
-2. Import it in [Vercel](https://vercel.com/new).
-3. Add the three environment variables from step 3 in the Vercel project
-   settings (Production and Preview).
-4. Deploy. Vercel automatically builds the Vite app and deploys
-   `api/send-enquiry.js` as a serverless function at `/api/send-enquiry`.
-
-**Other platforms:** any host that supports a Node.js serverless/edge
-function alongside a static Vite build (Netlify Functions, Cloudflare
-Pages Functions, AWS Lambda behind API Gateway) will work — copy the logic
-in `api/send-enquiry.js` into that platform's function signature and keep
-the same environment variables.
-
-## Design notes
-
-- Palette, type (Space Grotesk / Inter / JetBrains Mono) and the animated
-  "system map" hero graphic are defined to represent AK Mindstack's actual
-  work — connecting separate business systems (web, mobile, commerce,
-  WhatsApp, APIs) into one product — rather than a generic template look.
-- Dark/light section rhythm (`Section` component's `tone` prop) is used
-  instead of a single flat background for visual pacing down the page.
-- All interactive elements have visible focus states and the page respects
-  `prefers-reduced-motion`.
+Firebase project ID: `akmindstack`
+Deployed URL: https://akmindstack.web.app
