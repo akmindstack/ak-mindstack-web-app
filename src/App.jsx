@@ -5,6 +5,7 @@ import Hero from './components/sections/Hero.jsx'
 import Stats from './components/sections/Stats.jsx'
 import About from './components/sections/About.jsx'
 import Services from './components/sections/Services.jsx'
+import WhatsAppFlow from './components/sections/WhatsAppFlow.jsx'
 import Solutions from './components/sections/Solutions.jsx'
 import Process from './components/sections/Process.jsx'
 import WhyUs from './components/sections/WhyUs.jsx'
@@ -21,6 +22,7 @@ export default function App() {
         <Stats />
         <About />
         <Services />
+        <WhatsAppFlow />
         <Solutions />
         <Process />
         <WhyUs />

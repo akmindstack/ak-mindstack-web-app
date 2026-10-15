@@ -1,99 +1,193 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-// Signature hero visual: a set of product/integration nodes converging
-// into the AK Mindstack core, with animated pulses along the connectors —
-// a literal picture of what the brand does (wiring separate systems together).
-const nodes = [
-  { id: 'web', label: 'Web App', x: 40, y: 40 },
-  { id: 'mobile', label: 'Mobile App', x: 40, y: 140 },
-  { id: 'commerce', label: 'E-Commerce', x: 40, y: 240 },
-  { id: 'whatsapp', label: 'WhatsApp', x: 40, y: 340 },
-  { id: 'api', label: 'APIs', x: 40, y: 440 },
+const CX = 250
+const CY = 250
+const CORE_R = 52
+const NODE_R = 158
+const NODE_W = 112
+const NODE_H = 34
+
+const toRad = (deg) => (deg * Math.PI) / 180
+
+const serviceNodes = [
+  { id: 'web',     label: 'Web App',     angle: -90  },
+  { id: 'mobile',  label: 'Mobile App',  angle: -30  },
+  { id: 'ecom',    label: 'E-Commerce',  angle: 30   },
+  { id: 'wa',      label: 'WhatsApp',    angle: 90   },
+  { id: 'payment', label: 'Payments',    angle: 150  },
+  { id: 'admin',   label: 'Admin Panel', angle: -150 },
 ]
 
-const core = { x: 340, y: 240 }
+function nodePos(angle) {
+  return {
+    x: CX + NODE_R * Math.cos(toRad(angle)),
+    y: CY + NODE_R * Math.sin(toRad(angle)),
+  }
+}
+
+function coreEdge(angle) {
+  return {
+    x: CX + (CORE_R + 2) * Math.cos(toRad(angle)),
+    y: CY + (CORE_R + 2) * Math.sin(toRad(angle)),
+  }
+}
 
 export default function SystemMap() {
   return (
-    <div className="relative mx-auto aspect-[9/10] w-full max-w-md">
-      <svg viewBox="0 0 420 480" className="h-full w-full" role="img" aria-label="Diagram of AK Mindstack connecting web, mobile, e-commerce, WhatsApp and API systems">
+    <div className="relative mx-auto aspect-square w-full max-w-[420px]">
+      <svg
+        viewBox="0 0 500 500"
+        className="h-full w-full"
+        role="img"
+        aria-label="AK Mindstack hub connecting Web, Mobile, E-Commerce, WhatsApp, Payments and Admin Panel"
+      >
         <defs>
-          <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#00B8A9" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#00B8A9" stopOpacity="0.9" />
-          </linearGradient>
+          {/* radial background glow */}
+          <radialGradient id="bg-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#00B8A9" stopOpacity="0.07" />
+            <stop offset="100%" stopColor="#12161C" stopOpacity="0" />
+          </radialGradient>
+
+          {/* core glow filter */}
+          <filter id="core-glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* per-connection gradient (node → core) */}
+          {serviceNodes.map((n) => {
+            const p = nodePos(n.angle)
+            const e = coreEdge(n.angle)
+            return (
+              <linearGradient
+                key={`lg-${n.id}`}
+                id={`lg-${n.id}`}
+                x1={p.x} y1={p.y}
+                x2={e.x} y2={e.y}
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop offset="0%"   stopColor="#00B8A9" stopOpacity="0.12" />
+                <stop offset="100%" stopColor="#00B8A9" stopOpacity="0.85" />
+              </linearGradient>
+            )
+          })}
         </defs>
 
-        {nodes.map((n, i) => (
-          <g key={n.id}>
-            <path
-              d={`M ${n.x + 66} ${n.y} C ${(n.x + core.x) / 2} ${n.y}, ${(n.x + core.x) / 2} ${core.y}, ${core.x - 46} ${core.y}`}
-              stroke="url(#lineGrad)"
+        {/* background glow blob */}
+        <circle cx={CX} cy={CY} r="210" fill="url(#bg-grad)" />
+
+        {/* ── connection lines (drawn first, behind nodes) ── */}
+        {serviceNodes.map((n, i) => {
+          const p = nodePos(n.angle)
+          const e = coreEdge(n.angle)
+          const d = `M ${p.x} ${p.y} L ${e.x} ${e.y}`
+          return (
+            <motion.path
+              key={`line-${n.id}`}
+              d={d}
+              stroke={`url(#lg-${n.id})`}
               strokeWidth="1.5"
               fill="none"
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 + i * 0.08, ease: 'easeOut' }}
             />
+          )
+        })}
+
+        {/* ── animated travelling dots ── */}
+        {serviceNodes.map((n, i) => {
+          const p = nodePos(n.angle)
+          const e = coreEdge(n.angle)
+          const d = `M ${p.x} ${p.y} L ${e.x} ${e.y}`
+          return (
             <motion.circle
-              r="3"
+              key={`dot-${n.id}`}
+              r="3.5"
               fill="#5FE3D6"
-              initial={{ offsetDistance: '0%' }}
-              animate={{ offsetDistance: '100%' }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', delay: i * 0.4 }}
-              style={{
-                offsetPath: `path('M ${n.x + 66} ${n.y} C ${(n.x + core.x) / 2} ${n.y}, ${(n.x + core.x) / 2} ${core.y}, ${core.x - 46} ${core.y}')`,
+              style={{ offsetPath: `path('${d}')` }}
+              initial={{ offsetDistance: '0%', opacity: 0 }}
+              animate={{ offsetDistance: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 2.2,
+                delay: 0.9 + i * 0.38,
+                ease: 'easeInOut',
+                times: [0, 0.1, 0.85, 1],
               }}
             />
-          </g>
-        ))}
+          )
+        })}
 
-        {nodes.map((n) => (
-          <g key={`node-${n.id}`}>
-            <rect
-              x={n.x - 62}
-              y={n.y - 18}
-              width="128"
-              height="36"
-              rx="10"
-              fill="#1B212B"
-              stroke="#262C36"
-            />
-            <text
-              x={n.x}
-              y={n.y + 5}
-              textAnchor="middle"
-              fontFamily="'JetBrains Mono', monospace"
-              fontSize="11"
-              fill="#DDE1E6"
+        {/* ── core ── */}
+        <motion.g
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
+          style={{ transformOrigin: `${CX}px ${CY}px` }}
+        >
+          {/* outermost pulsing ring */}
+          <motion.circle
+            cx={CX} cy={CY}
+            fill="none"
+            stroke="#00B8A9"
+            strokeWidth="0.8"
+            animate={{ r: [CORE_R + 10, CORE_R + 18, CORE_R + 10], opacity: [0.35, 0.08, 0.35] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          {/* mid glow ring */}
+          <circle cx={CX} cy={CY} r={CORE_R + 8} fill="none" stroke="#00B8A9" strokeWidth="0.6" opacity="0.25" filter="url(#core-glow)" />
+          {/* solid ring */}
+          <circle cx={CX} cy={CY} r={CORE_R + 3} fill="none" stroke="#00B8A9" strokeWidth="1" opacity="0.5" />
+          {/* filled core */}
+          <circle cx={CX} cy={CY} r={CORE_R} fill="#12161C" stroke="#00B8A9" strokeWidth="1.5" />
+          {/* core text */}
+          <text x={CX} y={CY - 7} textAnchor="middle" fontFamily="'Space Grotesk', sans-serif" fontSize="17" fontWeight="700" fill="#F3F4F0">
+            AK
+          </text>
+          <text x={CX} y={CY + 11} textAnchor="middle" fontFamily="'JetBrains Mono', monospace" fontSize="8.5" letterSpacing="2.5" fill="#5FE3D6">
+            MINDSTACK
+          </text>
+        </motion.g>
+
+        {/* ── service nodes ── */}
+        {serviceNodes.map((n, i) => {
+          const { x, y } = nodePos(n.angle)
+          const rx = x - NODE_W / 2
+          const ry = y - NODE_H / 2
+          return (
+            <motion.g
+              key={`node-${n.id}`}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.45, delay: 0.05 + i * 0.07, ease: [0.34, 1.56, 0.64, 1] }}
+              style={{ transformOrigin: `${x}px ${y}px` }}
             >
-              {n.label}
-            </text>
-          </g>
-        ))}
-
-        {/* Core */}
-        <circle cx={core.x} cy={core.y} r="46" fill="#12161C" stroke="#00B8A9" strokeWidth="1.5" />
-        <circle cx={core.x} cy={core.y} r="46" fill="none" stroke="#00B8A9" strokeWidth="1" opacity="0.5" className="animate-pulse-line" />
-        <text
-          x={core.x}
-          y={core.y - 4}
-          textAnchor="middle"
-          fontFamily="'Space Grotesk', sans-serif"
-          fontSize="13"
-          fontWeight="700"
-          fill="#F3F4F0"
-        >
-          AK
-        </text>
-        <text
-          x={core.x}
-          y={core.y + 14}
-          textAnchor="middle"
-          fontFamily="'JetBrains Mono', monospace"
-          fontSize="9"
-          fill="#5FE3D6"
-        >
-          MINDSTACK
-        </text>
+              {/* subtle outer glow on node */}
+              <rect x={rx - 1} y={ry - 1} width={NODE_W + 2} height={NODE_H + 2} rx="9" fill="none" stroke="#00B8A9" strokeWidth="0.5" opacity="0.3" />
+              {/* node box */}
+              <rect x={rx} y={ry} width={NODE_W} height={NODE_H} rx="8" fill="#1A2030" stroke="#2A3242" strokeWidth="1" />
+              {/* left accent bar */}
+              <rect x={rx} y={ry + 7} width="2.5" height={NODE_H - 14} rx="2" fill="#00B8A9" opacity="0.9" />
+              {/* label */}
+              <text
+                x={x + 5}
+                y={y + 5}
+                textAnchor="middle"
+                fontFamily="'JetBrains Mono', monospace"
+                fontSize="10.5"
+                fill="#CDD1D9"
+              >
+                {n.label}
+              </text>
+            </motion.g>
+          )
+        })}
       </svg>
     </div>
   )
