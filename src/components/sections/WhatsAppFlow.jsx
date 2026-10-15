@@ -1,27 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const STEP_DURATION = 5000
+const STEP_DURATION = 5500
 
+// ── Product catalog data ────────────────────────────────────────────────────
+const products = [
+  { id: 1, emoji: '🍛', name: 'Chicken Biryani', price: '₹180', tag: 'Bestseller', g: ['#f97316', '#ef4444'] },
+  { id: 2, emoji: '🍔', name: 'Veg Burger',      price: '₹120', tag: null,         g: ['#22c55e', '#16a34a'] },
+  { id: 3, emoji: '🍕', name: 'Paneer Pizza',    price: '₹250', tag: 'Popular',    g: ['#ef4444', '#b91c1c'] },
+  { id: 4, emoji: '🍜', name: 'Hakka Noodles',   price: '₹150', tag: null,         g: ['#eab308', '#f97316'] },
+  { id: 5, emoji: '🥞', name: 'Masala Dosa',     price: '₹90',  tag: null,         g: ['#a16207', '#92400e'] },
+  { id: 6, emoji: '☕', name: 'Cold Coffee',     price: '₹80',  tag: 'New',        g: ['#7c3aed', '#6d28d9'] },
+]
+
+// ── Steps data ──────────────────────────────────────────────────────────────
 const steps = [
   {
-    id: 1,
-    tag: '01',
+    id: 1, tag: '01',
     title: 'Customer Says Hi',
-    description: 'Customer messages your WhatsApp Business number. The system instantly replies with your product catalog — no human needed.',
+    description: 'Customer messages your WhatsApp Business number. The bot instantly replies with your full product catalog — no human needed.',
     messages: [
       { from: 'customer', text: 'Hi, I want to order something' },
-      {
-        from: 'bot',
-        text: 'Welcome to *FreshBite* 🛍️\n\nHere\'s our menu:\n\n1️⃣  Chicken Biryani — ₹180\n2️⃣  Veg Burger — ₹120\n3️⃣  Paneer Pizza — ₹250\n4️⃣  Hakka Noodles — ₹150\n\nReply with the item number to order.',
-      },
+      { from: 'bot', text: 'Welcome to *FreshBite* 🛍️\nHere\'s our catalog — reply with item number to order:' },
+      { from: 'bot', type: 'catalog' },
     ],
   },
   {
-    id: 2,
-    tag: '02',
+    id: 2, tag: '02',
     title: 'Browse Catalog & Select Item',
-    description: 'Customer picks items directly by replying with the number. The bot handles the entire catalog navigation automatically.',
+    description: 'Customer picks items directly by replying with the item number. The bot handles catalog navigation automatically.',
     messages: [
       { from: 'customer', text: '1' },
       { from: 'bot', text: 'You selected *Chicken Biryani — ₹180* 🍛\n\nHow many would you like?' },
@@ -30,23 +37,18 @@ const steps = [
     ],
   },
   {
-    id: 3,
-    tag: '03',
+    id: 3, tag: '03',
     title: 'Order Summary',
-    description: 'The system shows a clear order summary so the customer can review everything before confirming.',
+    description: 'The bot shows a clear cart summary so the customer can review everything before confirming.',
     messages: [
       { from: 'customer', text: 'done' },
-      {
-        from: 'bot',
-        text: '🛒 *Your Order Summary*\n\n• Chicken Biryani × 2 — ₹360\n─────────────────\n*Total: ₹360*\n\nType *confirm* to proceed to checkout.',
-      },
+      { from: 'bot', text: '🛒 *Your Order Summary*\n\n• Chicken Biryani × 2 — ₹360\n─────────────────\n*Total: ₹360*\n\nType *confirm* to proceed to checkout.' },
     ],
   },
   {
-    id: 4,
-    tag: '04',
+    id: 4, tag: '04',
     title: 'Collect Delivery Address',
-    description: 'The system asks for the delivery address. Customer simply types it in — no app download, no form to fill.',
+    description: 'The bot asks for the delivery address. Customer just types it in — no app download, no form filling.',
     messages: [
       { from: 'customer', text: 'confirm' },
       { from: 'bot', text: '📍 Please share your *delivery address* to continue.' },
@@ -54,120 +56,224 @@ const steps = [
     ],
   },
   {
-    id: 5,
-    tag: '05',
+    id: 5, tag: '05',
     title: 'Booking Confirmed',
-    description: 'Order is instantly logged in the admin panel. A confirmation with all order details goes to the customer.',
+    description: 'Order is instantly logged in the admin panel. A confirmation with full order details goes to the customer.',
     messages: [
-      {
-        from: 'bot',
-        text: '✅ *Order #1042 Confirmed!*\n\nChicken Biryani × 2\nDelivery: MG Road, Bangalore\n\nGenerating your payment link...',
-      },
+      { from: 'bot', text: '✅ *Order #1042 Confirmed!*\n\nChicken Biryani × 2\nDelivery: MG Road, Bangalore\n\nGenerating your payment link...' },
     ],
   },
   {
-    id: 6,
-    tag: '06',
+    id: 6, tag: '06',
     title: 'UPI Payment Link Sent',
-    description: 'A secure payment link is sent directly in the chat — works with PhonePe, GPay, Paytm, or any UPI app.',
+    description: 'A secure payment card is sent in the chat — one tap pays with PhonePe, GPay, Paytm, or any UPI app.',
     messages: [
-      {
-        from: 'bot',
-        text: '💳 *Complete your payment to place the order*\n\nAmount: *₹360*\n\n👉 https://pay.freshbite.in/1042\n\nPhonePe · GPay · Paytm · BHIM · All UPI apps',
-      },
+      { from: 'bot', text: '💳 Complete your payment to confirm the order:' },
+      { from: 'bot', type: 'payment', amount: '₹360', orderId: '#1042' },
     ],
   },
   {
-    id: 7,
-    tag: '07',
+    id: 7, tag: '07',
     title: 'Order Placed — Success!',
-    description: 'Payment confirmed, order placed. The customer gets an instant success message and the business owner sees it in the admin panel.',
+    description: 'Payment confirmed instantly. Customer gets a success card with delivery tracking. Business owner sees the order in the admin panel.',
     messages: [
-      {
-        from: 'bot',
-        text: '🎉 *Payment Received! Order Placed!*\n\nOrder #1042 confirmed.\n📦 Estimated delivery: 45–60 mins\n\nWe\'ll notify you when your order is on the way. Thank you! 🙏',
-      },
+      { from: 'bot', type: 'success', orderId: '#1042', time: '45–60 mins' },
+      { from: 'bot', text: 'We\'ll send live updates as your order is prepared. Thank you! 🙏' },
     ],
   },
 ]
 
+// ── Helpers ─────────────────────────────────────────────────────────────────
 function parseText(raw) {
+  if (!raw) return null
   return raw.split('\n').map((line, li, arr) => {
     const parts = line.split(/\*([^*]+)\*/g)
     return (
       <span key={li}>
-        {parts.map((p, pi) =>
-          pi % 2 === 1 ? <strong key={pi}>{p}</strong> : p,
-        )}
+        {parts.map((p, pi) => (pi % 2 === 1 ? <strong key={pi}>{p}</strong> : p))}
         {li < arr.length - 1 && <br />}
       </span>
     )
   })
 }
 
-function ChatBubble({ from, text, delay = 0 }) {
+// ── Chat message types ───────────────────────────────────────────────────────
+function TextBubble({ from, text, delay = 0 }) {
   const isBot = from === 'bot'
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.96 }}
+      initial={{ opacity: 0, y: 8, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.3, delay }}
-      className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-2`}
+      className={`mb-2 flex ${isBot ? 'justify-start' : 'justify-end'}`}
     >
-      <div
-        className={`max-w-[88%] rounded-xl px-3 py-2 text-[11px] leading-relaxed shadow-sm ${
-          isBot
-            ? 'rounded-tl-sm bg-[#202C33] text-[#E9EDEF]'
-            : 'rounded-tr-sm bg-[#005C4B] text-[#E9EDEF]'
-        }`}
-      >
+      <div className={`max-w-[88%] rounded-xl px-3 py-2 text-[11px] leading-relaxed shadow-sm ${
+        isBot ? 'rounded-tl-sm bg-[#202C33] text-[#E9EDEF]' : 'rounded-tr-sm bg-[#005C4B] text-[#E9EDEF]'
+      }`}>
         {parseText(text)}
-        <span className="ml-2 text-[9px] opacity-40">
-          {isBot ? '10:32' : '10:31'}
-        </span>
+        <span className="ml-2 text-[9px] opacity-40">{isBot ? '10:32' : '10:31'}</span>
       </div>
     </motion.div>
   )
 }
 
+function CatalogCards({ delay = 0 }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.35, delay }}
+      className="mb-2 flex justify-start"
+    >
+      <div className="w-[94%] overflow-hidden rounded-xl rounded-tl-sm bg-[#202C33] p-2">
+        <p className="mb-2 text-[9px] font-semibold text-[#8696A0] uppercase tracking-wide">📋 Our Catalog</p>
+        <div className="grid grid-cols-3 gap-1.5">
+          {products.map((p) => (
+            <div key={p.id} className="overflow-hidden rounded-lg">
+              <div
+                className="relative flex h-[46px] items-center justify-center"
+                style={{ background: `linear-gradient(135deg, ${p.g[0]}, ${p.g[1]})` }}
+              >
+                <span className="text-[22px] leading-none">{p.emoji}</span>
+                {p.tag && (
+                  <span className="absolute right-0.5 top-0.5 rounded bg-black/50 px-1 text-[6.5px] font-bold text-white">
+                    {p.tag}
+                  </span>
+                )}
+              </div>
+              <div className="bg-[#1A2530] px-1.5 py-1">
+                <p className="truncate text-[7.5px] leading-tight text-[#E9EDEF]">{p.name}</p>
+                <p className="mt-0.5 font-mono text-[8px] font-bold text-[#25D366]">{p.price}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <span className="mt-1.5 block text-right text-[9px] text-[#8696A0]">10:32</span>
+      </div>
+    </motion.div>
+  )
+}
+
+function PaymentCard({ amount, orderId, delay = 0 }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay }}
+      className="mb-2 flex justify-start"
+    >
+      <div className="w-[88%] overflow-hidden rounded-xl">
+        <div className="flex items-center gap-2.5 bg-[#0D3329] px-3 py-2.5">
+          <span className="text-xl">💳</span>
+          <div className="flex-1">
+            <p className="text-[11px] font-semibold text-[#25D366]">Payment Request</p>
+            <p className="text-[9px] text-[#8696A0]">Order {orderId}</p>
+          </div>
+          <p className="text-base font-bold text-white">{amount}</p>
+        </div>
+        <div className="bg-[#202C33] px-3 py-2.5">
+          <p className="mb-2 text-[9.5px] text-[#8696A0]">Pay securely with any UPI app</p>
+          <div className="mb-2.5 flex flex-wrap gap-1.5">
+            {['PhonePe', 'GPay', 'Paytm', 'BHIM'].map((app) => (
+              <span key={app} className="rounded-md bg-[#2A3942] px-2 py-0.5 text-[9px] text-[#E9EDEF]">
+                {app}
+              </span>
+            ))}
+          </div>
+          <div className="rounded-lg bg-[#25D366] py-2 text-center text-[10.5px] font-bold text-[#0D1418]">
+            Tap to Pay {amount}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+function SuccessCard({ orderId, time, delay = 0 }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.94 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4, delay, ease: [0.34, 1.56, 0.64, 1] }}
+      className="mb-2 flex justify-start"
+    >
+      <div className="w-[88%] overflow-hidden rounded-xl bg-[#202C33]">
+        <div className="flex flex-col items-center bg-[#0D3329] px-3 py-3 text-center">
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: delay + 0.2, type: 'spring', stiffness: 300 }}
+            className="text-3xl"
+          >
+            🎉
+          </motion.span>
+          <p className="mt-1 text-[12px] font-bold text-[#25D366]">Order Placed!</p>
+          <p className="text-[10px] text-[#E9EDEF]">{orderId} confirmed &amp; paid</p>
+        </div>
+        <div className="px-3 py-2.5">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-[10px] text-[#8696A0]">Estimated delivery</span>
+            <span className="text-[10px] font-semibold text-[#E9EDEF]">{time}</span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-[#2A3942]">
+            <motion.div
+              className="h-full rounded-full bg-[#25D366]"
+              initial={{ width: '0%' }}
+              animate={{ width: '35%' }}
+              transition={{ duration: 1.2, delay: delay + 0.4 }}
+            />
+          </div>
+          <div className="mt-1 flex justify-between text-[8px]">
+            <span className="text-[#25D366]">● Confirmed</span>
+            <span className="text-[#8696A0]">Preparing</span>
+            <span className="text-[#8696A0]">On the way</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+function ChatMessage({ from, text, type, amount, orderId, time, delay = 0 }) {
+  if (type === 'catalog') return <CatalogCards delay={delay} />
+  if (type === 'payment') return <PaymentCard amount={amount} orderId={orderId} delay={delay} />
+  if (type === 'success') return <SuccessCard orderId={orderId} time={time} delay={delay} />
+  return <TextBubble from={from} text={text} delay={delay} />
+}
+
+// ── Phone mockup ─────────────────────────────────────────────────────────────
 function PhoneMockup({ messages, stepKey }) {
   const scrollRef = useRef(null)
-
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [stepKey])
 
   return (
-    <div className="relative w-[270px] shrink-0 overflow-hidden rounded-[38px] border-[7px] border-[#1C2632] bg-[#0D1418] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]">
-      {/* phone notch */}
+    <div className="relative w-[272px] shrink-0 overflow-hidden rounded-[38px] border-[7px] border-[#1C2632] bg-[#0D1418] shadow-[0_32px_72px_-12px_rgba(0,0,0,0.7)]">
+      {/* notch */}
       <div className="flex h-6 items-center justify-center bg-[#0D1418]">
         <div className="h-3.5 w-14 rounded-full bg-[#1C2632]" />
       </div>
-
-      {/* whatsapp header */}
+      {/* header */}
       <div className="flex items-center gap-2.5 bg-[#1F2C34] px-3 py-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] font-bold text-sm text-white">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">
           FB
         </div>
         <div>
           <p className="text-[13px] font-semibold text-white">FreshBite</p>
           <p className="text-[10px] text-[#8696A0]">WhatsApp Business · online</p>
         </div>
-        <div className="ml-auto flex gap-3 text-[#8696A0]">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.91 15.91 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.11-.27c1.21.49 2.53.76 3.88.76a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.61 21 3 14.39 3 6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.36.27 2.68.76 3.88a1 1 0 0 1-.27 1.1l-2.37 2.04z" /></svg>
+        <div className="ml-auto text-[#8696A0]">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.62 10.79a15.91 15.91 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.11-.27c1.21.49 2.53.76 3.88.76a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.61 21 3 14.39 3 6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.36.27 2.68.76 3.88a1 1 0 0 1-.27 1.1l-2.37 2.04z" />
+          </svg>
         </div>
       </div>
-
-      {/* chat background + messages */}
+      {/* messages */}
       <div
         ref={scrollRef}
         className="h-[400px] overflow-y-auto bg-[#0D1418] px-3 py-3"
-        style={{
-          backgroundImage: 'radial-gradient(#1A2530 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-        }}
+        style={{ backgroundImage: 'radial-gradient(#1A2530 1px, transparent 1px)', backgroundSize: '20px 20px', scrollbarWidth: 'none' }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -175,25 +281,21 @@ function PhoneMockup({ messages, stepKey }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
           >
             {messages.map((msg, i) => (
-              <ChatBubble key={i} {...msg} delay={i * 0.18} />
+              <ChatMessage key={i} {...msg} delay={i * 0.2} />
             ))}
           </motion.div>
         </AnimatePresence>
       </div>
-
-      {/* input bar */}
+      {/* input */}
       <div className="flex items-center gap-2 bg-[#1F2C34] px-3 py-2">
-        <div className="flex-1 rounded-full bg-[#2A3942] px-3 py-1.5 text-[10px] text-[#8696A0]">
-          Type a message…
-        </div>
+        <div className="flex-1 rounded-full bg-[#2A3942] px-3 py-1.5 text-[10px] text-[#8696A0]">Type a message…</div>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366]">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z" /></svg>
         </div>
       </div>
-
       {/* home bar */}
       <div className="flex h-5 items-center justify-center bg-[#0D1418]">
         <div className="h-1 w-20 rounded-full bg-[#2A3942]" />
@@ -202,145 +304,92 @@ function PhoneMockup({ messages, stepKey }) {
   )
 }
 
+// ── Main section ─────────────────────────────────────────────────────────────
 export default function WhatsAppFlow() {
   const [active, setActive] = useState(0)
   const [progress, setProgress] = useState(0)
-  const intervalRef = useRef(null)
+  const timerRef = useRef(null)
   const progressRef = useRef(null)
 
-  const startTimer = (fromStep) => {
-    clearInterval(intervalRef.current)
+  useEffect(() => {
+    clearTimeout(timerRef.current)
     clearInterval(progressRef.current)
     setProgress(0)
-
     const start = Date.now()
     progressRef.current = setInterval(() => {
-      const elapsed = Date.now() - start
-      setProgress(Math.min((elapsed / STEP_DURATION) * 100, 100))
+      setProgress(Math.min(((Date.now() - start) / STEP_DURATION) * 100, 100))
     }, 40)
-
-    intervalRef.current = setTimeout(() => {
-      setActive((a) => (a + 1) % steps.length)
-    }, STEP_DURATION)
-  }
-
-  useEffect(() => {
-    startTimer(active)
-    return () => {
-      clearTimeout(intervalRef.current)
-      clearInterval(progressRef.current)
-    }
+    timerRef.current = setTimeout(() => setActive((a) => (a + 1) % steps.length), STEP_DURATION)
+    return () => { clearTimeout(timerRef.current); clearInterval(progressRef.current) }
   }, [active])
 
   const goTo = (i) => {
-    clearTimeout(intervalRef.current)
-    clearInterval(progressRef.current)
-    setActive(i)
+    clearTimeout(timerRef.current); clearInterval(progressRef.current); setActive(i)
   }
-
-  const step = steps[active]
 
   return (
     <section id="whatsapp-flow" className="relative bg-ink bg-dot-grid-dark">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-        {/* header */}
+
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="mb-14 max-w-2xl"
+          className="mb-12 max-w-2xl"
         >
           <p className="eyebrow mb-3 text-signal-light">WhatsApp Business</p>
           <h2 className="text-3xl font-semibold leading-tight text-paper md:text-4xl">
             From first message to delivered order — fully automated.
           </h2>
           <p className="mt-4 text-base text-paper/60 md:text-lg">
-            See exactly how your customers place orders, pay, and get confirmed — all inside WhatsApp. No app download, no website needed.
+            Customers browse your catalog, place orders, and pay — all inside WhatsApp. No app download, no website needed.
           </p>
         </motion.div>
 
-        {/* main layout */}
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-14">
-          {/* step list */}
-          <div className="flex-1 space-y-1.5">
-            {steps.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => goTo(i)}
-                className={`w-full rounded-xl px-4 py-3.5 text-left transition-all duration-200 ${
-                  i === active
-                    ? 'border border-signal/30 bg-ink-soft'
-                    : 'border border-transparent hover:border-ink-line hover:bg-ink-soft/50'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <span
-                    className={`mt-0.5 font-mono text-[11px] font-medium ${
-                      i === active ? 'text-signal' : 'text-paper/30'
-                    }`}
-                  >
-                    {s.tag}
-                  </span>
-                  <div className="flex-1">
-                    <p
-                      className={`text-sm font-semibold leading-snug ${
-                        i === active ? 'text-paper' : 'text-paper/50'
-                      }`}
-                    >
-                      {s.title}
-                    </p>
-                    <AnimatePresence>
-                      {i === active && (
-                        <motion.p
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="mt-1 text-xs leading-relaxed text-paper/55"
-                        >
-                          {s.description}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                  {i === active && (
-                    <div className="mt-1 h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-ink-line">
-                      <motion.div
-                        className="h-full rounded-full bg-signal"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* phone mockup */}
+        {/* ── Phone + step label ── */}
+        <div className="flex flex-col items-center gap-6">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex justify-center lg:justify-end"
           >
-            <PhoneMockup messages={step.messages} stepKey={active} />
+            <PhoneMockup messages={steps[active].messages} stepKey={active} />
           </motion.div>
+
+          {/* step label */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25 }}
+              className="text-center"
+            >
+              <span className="font-mono text-[11px] text-signal">{steps[active].tag}</span>
+              <p className="mt-1 text-sm font-semibold text-paper">{steps[active].title}</p>
+              <p className="mt-1 max-w-sm text-xs text-paper/50">{steps[active].description}</p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* progress + dot nav */}
+          <div className="flex items-center gap-3">
+            {steps.map((_, i) => (
+              <button key={i} onClick={() => goTo(i)} className="flex flex-col items-center gap-1">
+                <div className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? 'w-8 bg-signal' : 'w-1.5 bg-paper/20'}`} />
+                {i === active && (
+                  <div className="h-0.5 w-8 overflow-hidden rounded-full bg-ink-line">
+                    <motion.div className="h-full rounded-full bg-signal" style={{ width: `${progress}%` }} />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* step dots — mobile/tablet quick nav */}
-        <div className="mt-8 flex justify-center gap-2 lg:hidden">
-          {steps.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === active ? 'w-6 bg-signal' : 'w-1.5 bg-paper/20'
-              }`}
-            />
-          ))}
-        </div>
       </div>
     </section>
   )
